@@ -51,7 +51,7 @@ classify <- function(ks,n1,n2) {
 	# train
 	train1 <- digit(X,n1)
 	train2 <- digit(X,n2)
-	print(paste("Trained on",nrow(train1)+nrow(train2),"exmaples"))
+	print(paste("Trained on",nrow(train1)+nrow(train2),"examples"))
 	# test
 	test1 <- digit(Y,n1)
 	test2 <- digit(Y,n2)

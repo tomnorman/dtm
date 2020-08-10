@@ -75,7 +75,7 @@
 	The goal of geometric inference on point cloud data is to recover the geometry of the underlying shape (i.e. reconstruction) or the topological features (i.e. Betti numbers).
 	One way to do so is using distance functions, however one major drawback is lack of robustness to noise and outliers.
 	In  this paper the authors introduce smooth distance-like function (DTM) based on probability measure that has topological guarantees even in the presence of outliers.\\
-	Moreover when empirical distribuition ($\frac{1}{n}$ for each data point) is chosen over the data, DTM can be easily and intuetuvely evaluated.
+	Moreover when empirical distribution ($\frac{1}{n}$ for each data point) is chosen over the data, DTM can be easily and intuitively evaluated.
 	They also show how to use bootstrap to test the significance of the topological features and also choose the function hyperparameters.\\
 	The code for this summary is in \cite{git}.
 \section{Background}
@@ -83,7 +83,7 @@
 We'll define some key-concepts as distance function, sublevel sets and such in order to understand the motives to using DTM.
 
 \subsection{Distance Function}
-Let $S \subset \mathbb{R}^d$ be compact set. The distance function on $S$ is defind as
+Let $S \subset \mathbb{R}^d$ be compact set. The distance function on $S$ is defined as
 $$\Delta_S(x) = \inf_{y \in s} \norm{y-x}, \forall x \in S$$
 
 \subsection{Sublevel Sets}
@@ -102,7 +102,7 @@ Intuitively the bigger the lifetime of a feature the more relevant / persistent 
 
 \subsection{Persistent Diagram}
 A lifetime of a feature can be represented in the 2D plane as the coordinate ($b_i,d_i$).\\
-The set of those coordinates for given set $S$ is called the persistence digram of $\Delta_S$. Note that birth of a feature comes before his death so the diagram is contained above the diagonal.\\
+The set of those coordinates for given set $S$ is called the persistence diagram of $\Delta_S$. Note that birth of a feature comes before his death so the diagram is contained above the diagonal.\\
 As we discussed before, the more persistent a feature is, the bigger its lifetime thus further away it's from the diagonal (where birth equals death). Features close to the diagonal can be seen as topological noise.\\
 Note that in all persistence diagrams there exists a 0-dimension feature (connected component) at coordinate $(0,\infty)$.
 
@@ -112,8 +112,8 @@ Note that in all persistence diagrams there exists a 0-dimension feature (connec
 Given 2 compact sets $S_1,S_2$ with corresponding distance functions $\Delta_1, \Delta_2$ and diagrams $D_1,D_2$ (including the diagonal), define the bottleneck distance between them as
 $$W_\infty (D_1,D_2) = \min_{g: D_1 \rightarrow D_2} \sup_{z \in D_1} \norm{z - g(z)}_\infty$$
 $$g \text{ is a bijection.}$$
-In words: the bottleneck distance is the maximum $L_\infty$ distance between points of $D_1,D_2$ after minimzing over all pairing of the points (including the diagonals).\\
-A property of persistence diagram is stability; according to the Persistence Stability Theorm (Cohen-Steiner et al. (2005); Chazal et al. (2012)):
+In words: the bottleneck distance is the maximum $L_\infty$ distance between points of $D_1,D_2$ after minimizing over all pairing of the points (including the diagonals).\\
+A property of persistence diagram is stability; according to the Persistence Stability Theorem (Cohen-Steiner et al. (2005); Chazal et al. (2012)):
 $$W_\infty (D_1,D_2) \leq \norm{\Delta_1 - \Delta_2}_\infty$$
 we'll use it later when discussing significance.
 
@@ -131,10 +131,10 @@ $$\hat{\Delta}(x) = \min_{X_i} \norm{x-X_i}$$
 	$$\sup_{x} |\hat{\Delta}(x) - \Delta_S(x)| \overset{P}{\rightarrow} 0$$
 \end{lemma}
 \text{ }\\
-This lemma justifies using $\hat{\Delta}$ to estimate persistence homology of sublevel sets of $\Delta_S$. In fact the sublevelsets of $\hat{\Delta}$ are balls around the data points with raduis t:
+This lemma justifies using $\hat{\Delta}$ to estimate persistence homology of sublevel sets of $\Delta_S$. In fact the sublevel sets of $\hat{\Delta}$ are balls around the data points with raduis t:
 $$L_t = \left\{ x: \hat{\Delta} (x) \leq t \right\} = \overset{n}{\underset{i=1}{\cup}} B_{x_i}(t)$$
 which is the same as Cech complex, the persistent homology will then be extracted using filtration and linear algebra.\\
-However, if the data includes noise or ouliers the emperical distance function $\hat\Delta$ no longer represents $\Delta_S$ truly (see Figure \ref{fig:noise}). The paper introduces a new notion of distance- distance to (probability) measure to overcome the noise/ouliers problem.
+However, if the data includes noise or ouliers the empirical distance function $\hat\Delta$ no longer represents $\Delta_S$ truly (see Figure \ref{fig:noise}). The paper introduces a new notion of distance- distance to (probability) measure to overcome the noise/ouliers problem.
 
 \image{noise.pdf}{1000 points samples from a circle + 200 points sampled from gaussian RV. We can see that the normal distance function (middle) creates lots of features while DTM (right) removes most of them and leaves one that looks significant}{0.3}{1}{fig:noise}
 
@@ -142,7 +142,7 @@ However, if the data includes noise or ouliers the emperical distance function $
 Given probability measure $P$, for $m \in (0,1)$ define DTM as
 $$DTM^2_{P,m}(x) = \frac{1}{m} \int_{0}^{m} \left( G_x^{-1}(u)\right)^2 du$$
 where $G_x(t) = \mathbb{P} \left( \norm{X - x} \leq t \right)$.\\
-When considering $P$ as the emperical distribuition $\hat P$ (i.e. for n data points give each $\frac{1}{n}$ probability mass), we get
+When considering $P$ as the empirical distribution $\hat P$ (i.e. for n data points give each $\frac{1}{n}$ probability mass), we get
 $$G_x(t) = \frac{\# \left\{X_i: X_i \in B_x(t) \right\}}{n}$$
 $$\Rightarrow G_x^{-1}(u) \text{ will give us the distance of the farthest $X_i$ from $x$ s.t. } \mathbb{P} \left( \norm{X-x} \leq \norm{X_i - x} \right) = u$$
 Define $k=\lceil u * n \rceil$. Because $G_x^{-1} (u)$ is constant in the range $u \in (\frac{k}{n}, \frac{k+1}{n}]$, then $G_x^{-1}(u)$ becomes a step function with step width $\frac{1}{n}$ and the value of each step is the distance between $x$ and its k-th nearest neighbor, which changes the integral to discrete sum of k nearest neighbors:
@@ -152,7 +152,7 @@ Note that for k=1 we get the regular distance function.
 
 \section{Significance of Topological Features}
 \subsection{Bootstrapping}
-We would like to get statistical estimations about our data like mean, variance and confidence intervals. Because the population (in our case the underlying shape) is unknown we will instead compute those estimation on our sampled data (the point cloud) by resampling with replacment from the sampled data number of times and creating an empirical distribution. This distribution is asymptotically consistent with the population distribuition.\\
+We would like to get statistical estimations about our data like mean, variance and confidence intervals. Because the population (in our case the underlying shape) is unknown we will instead compute those estimation on our sampled data (the point cloud) by resampling with replacement from the sampled data number of times and creating an empirical distribution. This distribution is asymptotically consistent with the population distribution.\\
 $\text{ }$\\
 \begin{algorithm}[H]
 \caption{Bootstrapping}
@@ -200,7 +200,7 @@ The diagonal represents features with 0 lifetime, so for $|d_i - b_i| \leq 2\fra
 \def\ftn{2\frac{\tha}{\sqrt{n}}}
 \section{Choosing Smoothing Parameter}
 Using a smoothing parameter rises the need for hyper-parameter tuning. So what is the metric for which a smoothing parameter considered good?\\
-The paper suggets two quantities to measure the amount of siginificance information.\\
+The paper suggests two quantities to measure the amount of significance information.\\
 Define $\ell_i(m)$ as the lifetime of feature $i$ with parameter $m$.
 
 Number of features that are $\alpha$ significant:
@@ -210,7 +210,7 @@ Total $\alpha$ significant persistence:
 $$S(m) = \sum_i \left[ \ell_i(m) - \ftn \right]_+$$
 
 \text{ }\\
-The $m$ that maximizes $N(m)$ or $S(m)$ is choosen (see Figure \ref{fig:bootstrap}).
+The $m$ that maximizes $N(m)$ or $S(m)$ is chosen (see Figure \ref{fig:bootstrap}).
 
 \image{boot.pdf}{Using the same noised data from Figure \ref{fig:noise}, $k=[1:20:201], B=30, \alpha=0.05.$\\
 $m\geq 41/1200$ will maximize N and $m=201/1200$ will maximize S.}{0.5}{1}{fig:bootstrap}
@@ -220,7 +220,7 @@ $m\geq 41/1200$ will maximize N and $m=201/1200$ will maximize S.}{0.5}{1}{fig:b
 
 The paper is very comprehensive with respect to the analysis of the proposed method. Most of the theorems and conclusions are made for the general DTM (with general distribution $P$, not just the empirical $\hat P$).
 The empirical DTM is very intuitive- take the distance to a cluster of data points to smooth the noise, also the way to choose smoothing parameters is easy to understand.\\
-The authors used mainly syntethic examples which doesn't show if the method is really applicative, however they implemented almost everything in R, and made it open-source so we can try on real data. As a small bonus, in the end, they provide some points for further research.
+The authors used mainly synthetic examples which doesn't show if the method is really applicative, however they implemented almost everything in R, and made it open-source so we can try on real data. As a small bonus, in the end, they provide some points for further research.
 
 
 \newcommand\figu[1]{Figure \ref{#1}}
@@ -271,14 +271,14 @@ I'll try to classify 0 vs 6 using DTM.
 		Compute the mean of those lifetimes.
 	\item
 		Iterate over all given examples in the test data, if the lifetime of the most significant hole is closer to the mean of 0, classify as 0, else as 6.\\
-		If no hole or the lifetime is equaly close, don't classify.
+		If no hole or the lifetime is equally close, don't classify.
 \end{enumerate}
 I made this experiment also for 0 vs 9 and 6 vs 9.
 The results: (cont. on page 14)
 \begin{itemize}
 	\item
 		\underline{0 vs 6}\\
-Trained on 11841 exmaples\\
+Trained on 11841 examples\\
 Tested on  1938 examples\\
 k = 1\\
 0 mean = 3.65642875028104 | 6 mean = 1.29528674239364\\
@@ -328,7 +328,7 @@ Not classified 15 examples
 
 	\item
 		\underline{6 vs 9}\\
-Trained on 11867 exmaples\\
+Trained on 11867 examples\\
 Tested on  1967 examples\\
 k = 1\\
 6 mean = 1.29528674239364 | 9 mean = 1.71784789743753\\
@@ -354,7 +354,7 @@ Not classified 67 examples
 
 As we can infer from the results DTM with k=5 works best on MNIST, while with k=10 we get poor results.
 For 0 vs 6/9 we get good results because the hole in zero is more significant (as we can see from the difference in the means).\\
-Overall DTM with resonable amount of tuning outperforms the regular distance function.
+Overall DTM with reasonable amount of tuning outperforms the regular distance function.
 
 \text{}\\
 Dataset taken from \cite{mnist}.
