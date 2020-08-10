@@ -49,15 +49,18 @@ R <- torusUnif(n=10000,a=0.5,c=1)
 X <- rbind(R,Y,Z)
 
 pdf("sc_data.pdf")
-par(mfrow = c(1,2))
+par(mfrow = c(1,3))
 diag <- gridDiag(X = X, FUN = dtm, lim = create_lim(X), by = 0.065, m0 = 1/nrow(X), library = "Dionysus")
 plot(diag[["diagram"]], main = "Original Data")
 
 noise <- replicate(3, rnorm(2000))
 X_n <- rbind(X,noise)
 lim <- replicate(3,c(-2,3))
-diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 40/nrow(X_n), library = "Dionysus")
+diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 1/nrow(X_n), library = "Dionysus")
 plot(diag[["diagram"]], main = "Noised Data")
+
+diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 40/nrow(X_n), library = "Dionysus")
+plot(diag[["diagram"]], main = "DTM on Noised Data")
 dev.off()
 
 giffer("sc_clean",X)
@@ -70,15 +73,18 @@ R <- torusUnif(n=10000,a=0.5,c=1)
 X <- rbind(R,Y,Z)
 
 pdf("cc_data.pdf")
-par(mfrow = c(1,2))
+par(mfrow = c(1,3))
 diag <- gridDiag(X = X, FUN = dtm, lim = create_lim(X), by = 0.065, m0 = 1/nrow(X), library = "Dionysus")
 plot(diag[["diagram"]], main = "Original Data")
 
 noise <- replicate(3, rnorm(2000))
 X_n <- rbind(X,noise)
 lim <- replicate(3,c(-2.5,2.5))
-diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 40/nrow(X_n), library = "Dionysus")
+diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 1/nrow(X_n), library = "Dionysus")
 plot(diag[["diagram"]], main = "Noised Data")
+
+diag <- gridDiag(X = X_n, FUN = dtm, lim = lim, by = 0.065, m0 = 40/nrow(X_n), library = "Dionysus")
+plot(diag[["diagram"]], main = "DTM on Noised Data")
 dev.off()
 
 giffer("cc_clean",X)
